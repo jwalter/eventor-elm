@@ -5,7 +5,8 @@ import Json.Decode exposing (int, string, float, list, Decoder, at, decodeString
 import Task
 
 import Eventor exposing (fetchData)
-import Organisation exposing (Organisation)
+import PersonList exposing (PersonList)
+import Person exposing (Person)
 
 main : Program Never
 main =
@@ -18,23 +19,23 @@ main =
 
 -- MODEL
   
-init : (Organisation, Cmd Msg)
+init : (PersonList, Cmd Msg)
 init =
-  ( Organisation.empty
-  , loadEventorOrganisation
+  ( PersonList.empty
+  , loadEventorPersonList
   )
 
 -- UPDATE
 type Msg
   = MorePlease
-  | FetchSucceed Organisation
+  | FetchSucceed PersonList
   | FetchFail Http.Error
 
-update : Msg -> Organisation -> (Organisation, Cmd Msg)
+update : Msg -> PersonList -> (PersonList, Cmd Msg)
 update msg org =
   case msg of
     MorePlease ->
-      (org, loadEventorOrganisation)
+      (org, loadEventorPersonList)
 
     FetchSucceed newOrg ->
       (newOrg, Cmd.none)
@@ -43,27 +44,33 @@ update msg org =
       ((Debug.log (httpErrorMessage x) org), Cmd.none)
 
 -- VIEW
-view : Organisation -> Html Msg
+view : PersonList -> Html Msg
 view org =
   div []
-    [ h2 [] [text (toString (List.map (\o -> o.name) org.orgName))]
-    ]
+    ([ h2 [] [text "Medlemmar"]] ++
+    List.map (\m -> memberView m) org.persons)
+    
+
+memberView : Person -> Html Msg
+memberView member =
+  div []
+    [ div [] [text (toString (List.map (\n -> n.family) member.name))]]
 
 -- SUBSCRIPTIONS
-subscriptions : Organisation -> Sub Msg
+subscriptions : PersonList -> Sub Msg
 subscriptions model =
   Sub.none
 
 -- HTTP
-loadEventorOrganisation : Cmd Msg
-loadEventorOrganisation =
+loadEventorPersonList : Cmd Msg
+loadEventorPersonList =
   let
     path =
-      "organisation/512"
+      "persons/organisations/512"
   in
-    loadEventorData path Organisation.decoder
+    loadEventorData path (at ["PersonList"] PersonList.decoder)
 
-loadEventorData : String -> Decoder Organisation -> Cmd Msg
+loadEventorData : String -> Decoder PersonList -> Cmd Msg
 loadEventorData path decoder =
   let
     url =
