@@ -4,26 +4,22 @@ import Html exposing (text)
 import Json.Decode exposing (string, int, list, at, map, Decoder, decodeString)
 import Json.Decode.Pipeline exposing (decode, required, custom)
 
-import GivenName exposing (GivenName)
+import JsonSupport exposing (insideList)
 
 type alias PersonName =
   { family : String
-  , given : List GivenName
+  , given : String
   }
 
 empty : PersonName
 empty =
-  PersonName "" []
+  PersonName "" ""
 
 decoder : Decoder PersonName
 decoder =
   decode PersonName
-    |> required "Family" myDecoder
-    |> required "Given" (list GivenName.decoder)
-
-myDecoder : Decoder String
-myDecoder =
-    map (\v -> List.foldr (++) "" v) (list string)
+    |> required "Family" (insideList "" string)
+    |> required "Given" (insideList "" (at ["_"] string))
 
 main : Html.Html a
 main =

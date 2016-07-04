@@ -47,14 +47,20 @@ update msg org =
 view : PersonList -> Html Msg
 view org =
   div []
-    ([ h2 [] [text "Medlemmar"]] ++
+    (
+      [ h2 [] [text "Medlemmar"]
+      , h4 [] [text (toString (List.length org.persons))]] ++
     List.map (\m -> memberView m) org.persons)
     
 
 memberView : Person -> Html Msg
 memberView member =
-  div []
-    [ div [] [text (toString (List.map (\n -> n.family) member.name))]]
+  tr []
+    [ td [] [text member.name.given]
+    , td [] [text member.name.family]
+    , td [] [(text member.birthDate)]
+    , td [] [(text member.phoneNumber)]
+    , td [] [(text member.mailAddress)]]
 
 -- SUBSCRIPTIONS
 subscriptions : PersonList -> Sub Msg
@@ -66,7 +72,7 @@ loadEventorPersonList : Cmd Msg
 loadEventorPersonList =
   let
     path =
-      "persons/organisations/512"
+      "persons/organisations/512?includeContactDetails=true"
   in
     loadEventorData path (at ["PersonList"] PersonList.decoder)
 
