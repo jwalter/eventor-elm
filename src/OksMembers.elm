@@ -46,11 +46,15 @@ update msg org =
 -- VIEW
 view : PersonList -> Html Msg
 view org =
-  div []
-    (
-      [ h2 [] [text "Medlemmar"]
-      , h4 [] [text (toString (List.length org.persons))]] ++
-    List.map (\m -> memberView m) org.persons)
+  let
+    sortedMembers =
+      (List.sortBy (\m -> m.name.family ++ m.name.given) org.persons)
+  in
+    div []
+      (
+        [ h2 [] [text "Medlemmar"]
+        , h4 [] [text (toString (List.length sortedMembers))]] ++
+      List.map (\m -> memberView m) sortedMembers)
     
 
 memberView : Person -> Html Msg
