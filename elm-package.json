@@ -1,7 +1,7 @@
 {
     "version": "1.0.0",
-    "summary": "helpful summary of your project, less than 80 characters",
-    "repository": "https://github.com/user/project.git",
+    "summary": "Playing around with the API for eventor.orientering.se",
+    "repository": "https://github.com/jwalter/eventor-elm.git",
     "license": "BSD3",
     "source-directories": [
         "src"
