@@ -7,7 +7,8 @@ import Json.Decode.Pipeline exposing (decode, required, custom, optional)
 import JsonSupport exposing (insideList)
 
 type alias Race =
-  { name : String
+  { id : String
+  , name : String
   , startDate : String
   , position : Point
   }
@@ -19,11 +20,12 @@ type alias Point =
 
 empty : Race
 empty =
-  Race "" "" (Point "" "")
+  Race "" "" "" (Point "" "")
 
 decoder : Decoder Race
 decoder =
   decode Race
+    |> required "EventId" (insideList "" string)
     |> required "Name" (insideList "" (nameDecoder))
     |> required "RaceDate" (insideList "" (at ["Date"] (insideList "" string)))
     |> optional "EventCenterPosition" (insideList (Point "" "") (at ["$"] pointDecoder)) (Point "" "")
