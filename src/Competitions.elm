@@ -1,12 +1,18 @@
+module Competitions exposing (Model)
+
 import Html exposing (..)
 import Html.App as Html
+import Html.Attributes exposing (style)
+import Html.Events exposing (onClick)
 import Http
 import Json.Decode exposing (int, string, float, list, Decoder, at, decodeString)
 import Task
 import String
+import Debug exposing (log)
 
 import Eventor exposing (fetchData)
-import Competition exposing (Competition, decoder)
+import EventorDecode exposing (..)
+import Competition exposing (Competition)
 import Race exposing (Race)
 
 main : Program Never
@@ -19,44 +25,59 @@ main =
     }
 
 -- MODEL
-  
-init : (List Competition, Cmd Msg)
+type alias Model =
+  { competitions : List Competition
+  , shownCompetition : String
+  }
+
+init : (Model, Cmd Msg)
 init =
-  ( []
+  ( Model [] ""
   , loadEventorCompetitions
   )
 
 -- UPDATE
 type Msg
-  = MorePlease
+  = ShowRaceDetails String
   | FetchSucceed (List Competition)
   | FetchFail Http.Error
+  | CompetitionMsg Competition.Msg
 
-update : Msg -> List Competition -> (List Competition, Cmd Msg)
-update msg org =
+update : Msg -> Model -> (Model, Cmd Msg)
+update msg model =
   case msg of
-    MorePlease ->
-      (org, loadEventorCompetitions)
+    ShowRaceDetails id ->
+      ({model | shownCompetition = id}, log ("show race " ++ id) Cmd.none)
 
-    FetchSucceed newOrg ->
-      (newOrg, Cmd.none)
+    FetchSucceed competitions ->
+      (Model competitions "", Cmd.none)
 
     FetchFail x ->
-      ((Debug.log (httpErrorMessage x) org), Cmd.none)
+      ((Debug.log (httpErrorMessage x) model), Cmd.none)
+
+    CompetitionMsg msg ->
+      (model, Cmd.none)
 
 -- VIEW
-view : List Competition -> Html Msg
-view competitions =
+view : Model -> Html Msg
+view model =
   let
-    races = allRaces competitions
+    races = allRaces model.competitions
     sorted = List.sortBy (\c -> c.startDate) races
   in
     div []
       (
-        [ h2 [] [text "Tävlingar"]
-        , h4 [] [text (toString (List.length sorted))]] ++
-      List.map (\m -> memberView m) sorted)
-    
+        [ h2 [] [ text "Tävlingar" ]
+        , h4 [] [ text (toString (List.length sorted)) ]
+        , div [] (List.map (\m -> competitionView m) sorted)
+        , div [] [ competitionDetails model ]
+        ]
+      )
+
+competitionDetails : Model -> Html Msg
+competitionDetails model =
+  Html.map CompetitionMsg (Competition.view (List.head (List.filter (\c -> c.id == model.shownCompetition) model.competitions)))
+
 allRaces : List Competition -> List Race
 allRaces competitions =
   List.foldr (\c all -> (List.append all (List.map (mergeNames c) c.races))) [] competitions
@@ -72,14 +93,15 @@ mergeNames competition race =
   in
     {race | name = name}
 
-memberView : Race -> Html Msg
-memberView member =
+competitionView : Race -> Html Msg
+competitionView race =
   tr []
-    [ td [] [text member.name]
-    , td [] [text member.startDate]]
+    [ td [ onClick (ShowRaceDetails race.id) ] [text race.name]
+    , td [] [text race.startDate]
+    ]
 
 -- SUBSCRIPTIONS
-subscriptions : List Competition -> Sub Msg
+subscriptions : Model -> Sub Msg
 subscriptions model =
   Sub.none
 
@@ -90,7 +112,7 @@ loadEventorCompetitions =
     path =
       "events?fromDate=2016-06-28&toDate=2016-07-30&classificationIds=1,2,3,6"
   in
-    loadEventorData path (at ["EventList", "Event"] (list Competition.decoder))
+    loadEventorData path (at ["EventList", "Event"] (list competition))
 
 loadEventorData : String -> Decoder (List Competition) -> Cmd Msg
 loadEventorData path decoder =

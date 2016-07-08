@@ -1,97 +1,36 @@
-module Competition exposing (Competition, decoder, empty)
+module Competition exposing (Competition, Msg, empty, view)
 
-import Html exposing (text)
-import Json.Decode exposing (string, int, list, at, map, Decoder, decodeString)
-import Json.Decode.Pipeline exposing (decode, required, custom)
-
-import JsonSupport exposing (insideList)
-import Race exposing (Race, decoder)
+import Html exposing (..)
+import Race exposing (Race)
 
 type alias Competition =
-  { name : String
+  { id: String
+  , name : String
   , startDate : String
   , races : List Race
+  , webUrl : String
   }
+
+type Msg = None
 
 empty : Competition
 empty =
-  Competition "" "" []
-
-decoder : Decoder Competition
-decoder =
-  decode Competition
-    |> required "Name" (insideList "" (at ["_"] string))
-    |> required "StartDate" (insideList "" (at ["Date"] (insideList "" string)))
-    |> required "EventRace" (list Race.decoder)
-
-main : Html.Html a
-main =
-  let
-    name = decodedName
-  in
-    case name of
-      Ok value ->
-        text (toString value)
-      Err msg ->
-       text ("Error: " ++ msg)
-
-decodedName : Result String Competition
-decodedName =
-  decodeString
-      decoder
-        """
-        {
-          "$": {
-            "eventForm": "IndSingleDay"
-          },
-          "EventId": [ "10936" ],
-          "Name": [{
-            "_": "SOK Nordiska, medeldistans",
-            "$": { "languageId": "sv" }
-          }],
-          "StartDate": [{
-            "Date": ["2016-07-02"],
-            "Clock": ["00:00:00"]
-          }],
-          "EventRace": [
-          {
-            "$": {
-              "raceLightCondition": "Day",
-              "raceDistance": "Long"
-            },
-            "EventRaceId": [
-              "12918"
-            ],
-            "EventId": [
-              "12215"
-            ],
-            "Name": [
-              {
-                "_": "Etapp 1, lång",
-                "$": {
-                  "languageId": "sv"
-                }
-              }
-            ],
-            "RaceDate": [
-              {
-                "Date": [
-                  "2016-07-04"
-                ],
-                "Clock": [
-                  "00:00:00"
-                ]
-              }
-            ],
-            "EventCenterPosition": [
-              {
-                "$": {
-                  "y": "59.28825",
-                  "x": "18.16078"
-                }
-              }
-            ]
-            }
-            ]
-        }
-        """
+  Competition "" "" "" [] ""
+  
+view : Maybe Competition -> Html.Html Msg
+view competition =
+  case competition of
+  Just c ->
+    table []
+      [ caption [] [ text "Allmän information" ]
+      , tbody []
+        [ tr [] 
+          [ td [] [ text "Tävlingens namn" ]
+          , td [] [ text c.name ]]
+        , tr []
+          [ td [] [ text "Datum" ]
+          , td [] [ text c.startDate ]]
+        ]
+      ]
+  Nothing ->
+    text ""
