@@ -1,8 +1,9 @@
-module Eventor exposing (fetchData)
+module Eventor.Api exposing (fetchData)
 
 import Http exposing (send, defaultSettings, empty, RawError, Response)
 import Task exposing (Task)
-import ApiKey
+import Eventor.ApiKey as ApiKey
+
 
 fetchData : String -> Task RawError Response
 fetchData url =

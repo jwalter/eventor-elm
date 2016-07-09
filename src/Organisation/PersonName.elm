@@ -4,7 +4,7 @@ import Html exposing (text)
 import Json.Decode exposing (string, int, list, at, map, Decoder, decodeString)
 import Json.Decode.Pipeline exposing (decode, required, custom)
 
-import JsonSupport exposing (insideList)
+import Eventor.JsonSupport exposing (insideList)
 
 type alias PersonName =
   { family : String

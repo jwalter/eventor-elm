@@ -1,4 +1,4 @@
-module JsonSupport exposing (insideList)
+module Eventor.JsonSupport exposing (insideList)
 
 import Json.Decode exposing (list, map, Decoder)
 

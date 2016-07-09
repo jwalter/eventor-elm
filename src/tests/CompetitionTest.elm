@@ -1,18 +1,18 @@
 import Html exposing (text)
 import Json.Decode exposing (string, int, list, at, map, Decoder, decodeString)
 
-import Competition exposing (Competition)
-import EventorDecode exposing (competition)
+import Competitions.Models exposing (Competition)
+import Eventor.Decode exposing (competition)
 
 
-main : Html.Html Competition.Msg
+main : Html.Html Never
 main =
   let
     name = decodedName
   in
     case name of
       Ok value ->
-        Competition.view (Just value)
+        text (toString value)
       Err msg ->
        text ("Error: " ++ msg)
 

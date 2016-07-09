@@ -1,49 +1,12 @@
-module Race exposing (Race, decoder, empty)
+module Race exposing (main)
 
 import Html exposing (text)
-import Json.Decode exposing (string, int, list, at, map, Decoder, decodeString, oneOf)
-import Json.Decode.Pipeline exposing (decode, required, custom, optional)
+import Json.Decode exposing (decodeString)
 
-import JsonSupport exposing (insideList)
+import Competitions.Models exposing (Race)
+import Eventor.Decode exposing (race)
 
-type alias Race =
-  { id : String
-  , name : String
-  , startDate : String
-  , position : Point
-  }
-
-type alias Point =
-  { x : String
-  , y : String
-  }
-
-empty : Race
-empty =
-  Race "" "" "" (Point "" "")
-
-decoder : Decoder Race
-decoder =
-  decode Race
-    |> required "EventId" (insideList "" string)
-    |> required "Name" (insideList "" (nameDecoder))
-    |> required "RaceDate" (insideList "" (at ["Date"] (insideList "" string)))
-    |> optional "EventCenterPosition" (insideList (Point "" "") (at ["$"] pointDecoder)) (Point "" "")
-
-nameDecoder : Decoder String
-nameDecoder =
-  oneOf
-  [ at ["_"] string
-    , string
-  ]
-
-pointDecoder : Decoder Point
-pointDecoder =
-  decode Point
-    |> required "x" string
-    |> required "y" string
-
-main : Html.Html a
+main : Html.Html Never
 main =
   let
     race = raceFromJson
@@ -57,7 +20,7 @@ main =
 raceFromJson : Result String Race
 raceFromJson =
   decodeString
-      decoder
+      race
         """
         {
           "$": {

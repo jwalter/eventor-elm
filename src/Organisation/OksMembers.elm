@@ -4,7 +4,7 @@ import Http
 import Json.Decode exposing (int, string, float, list, Decoder, at, decodeString)
 import Task
 
-import Eventor exposing (fetchData)
+import Eventor.Api exposing (fetchData)
 import PersonList exposing (PersonList)
 import Person exposing (Person)
 

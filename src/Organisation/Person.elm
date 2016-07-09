@@ -3,7 +3,7 @@ module Person exposing (Person, decoder, empty)
 import Json.Decode exposing (list, at, string, null, oneOf, map, Decoder, (:=), succeed)
 import Json.Decode.Pipeline exposing (decode, required, optional, optionalAt)
 
-import JsonSupport exposing (insideList)
+import Eventor.JsonSupport exposing (insideList)
 import PersonName exposing (PersonName)
 
 type alias Person =
