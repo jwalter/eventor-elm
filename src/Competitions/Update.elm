@@ -19,7 +19,7 @@ type alias UpdateModel =
 
 init : (List Competition, Cmd Msg)
 init =
-    ( [ {newCompetition | name = "Hello", id = "1" }], loadEventorCompetitions)
+    ( [ {newCompetition | name = "-Laddar-", id = "1" }], loadEventorCompetitions)
 
 
 routerConfig : Config Models.Route
