@@ -3,7 +3,7 @@ module Competitions.View exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (href, style)
 import Hop.Types exposing (Location)
-import Competitions.Models exposing (CompetitionId, Competition, Route, Route(..))
+import Competitions.Models exposing (Competition, Route, Route(..))
 import Competitions.Messages exposing (..)
 import Competitions.List
 import Competitions.Show
@@ -16,17 +16,9 @@ type alias ViewModel =
     }
 
 
-containerStyle : Html.Attribute a
-containerStyle =
-    style
-        [ ( "margin-bottom", "5rem" )
-        , ( "overflow", "auto" )
-        ]
-
-
 view : ViewModel -> Html Msg
 view model =
-    div [ containerStyle ]
+    div []
         [ subView model
         ]
 
@@ -65,7 +57,7 @@ notFoundView model =
         ]
 
 
-getCompetition : List Competition -> CompetitionId -> Maybe Competition
+getCompetition : List Competition -> String -> Maybe Competition
 getCompetition competitions id =
     competitions
         |> List.filter (\comp -> comp.id == id)

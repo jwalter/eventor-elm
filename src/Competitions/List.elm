@@ -2,7 +2,6 @@ module Competitions.List exposing (..)
 
 import Html exposing (..)
 import Html.Events exposing (onClick)
-import Html.Attributes exposing (class, href, style)
 import String
 import Hop.Types exposing (Location)
 import Competitions.Models exposing (..)
@@ -15,14 +14,6 @@ type alias ViewModel =
     }
 
 
-styles : Html.Attribute a
-styles =
-    style
-        [ ( "float", "left" )
-        , ( "margin-right", "2rem" )
-        ]
-
-
 view : ViewModel -> Html Msg
 view model =
     let
@@ -31,7 +22,7 @@ view model =
                 |> allRaces
                 |> List.sortBy (\c -> c.startDate)
     in
-        div [ styles ]
+        div []
             [ h2 [] [ text "Tävlingar" ]
             , table []
                 [ tbody [] (tableRows races) ]
