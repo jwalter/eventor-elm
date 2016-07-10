@@ -7,9 +7,9 @@ import Eventor.ApiKey as ApiKey
 
 fetchData : String -> Task RawError Response
 fetchData url =
-  send defaultSettings 
-  { verb = "GET"
-  , headers = [("apikey", ApiKey.value)]
-  , url = url
-  , body = empty
-  }
+    send defaultSettings
+        { verb = "GET"
+        , headers = [ ( "apikey", ApiKey.value ) ]
+        , url = url
+        , body = empty
+        }

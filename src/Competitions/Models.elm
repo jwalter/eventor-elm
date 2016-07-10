@@ -9,31 +9,36 @@ type alias Competition =
     , webUrl : Maybe String
     }
 
+
 type alias Race =
-  { id : String
-  , name : String
-  , startDate : String
-  , position : Point
-  }
+    { id : String
+    , name : String
+    , startDate : String
+    , position : Point
+    }
+
 
 type alias Point =
-  { x : String
-  , y : String
-  }
+    { x : String
+    , y : String
+    }
+
 
 newCompetition : Competition
 newCompetition =
-    { id =  ""
+    { id = ""
     , name = ""
     , startDate = ""
     , races = []
     , webUrl = Just ""
     }
 
+
+
 -- ROUTING
+
 
 type Route
     = CompetitionsRoute
     | CompetitionRoute String
     | NotFoundRoute
-

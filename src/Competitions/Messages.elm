@@ -1,7 +1,6 @@
 module Competitions.Messages exposing (..)
 
 import Http
-
 import Competitions.Models exposing (..)
 
 

@@ -19,4 +19,3 @@ view competition =
         [ h2 [ id "titleCompetition" ] [ text competition.name ]
         , div [] [ text competition.startDate ]
         ]
-

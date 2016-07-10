@@ -8,7 +8,6 @@ import Models exposing (..)
 import Update exposing (..)
 import View exposing (..)
 import Routing.Config
-
 import Competitions.Update
 
 
@@ -29,8 +28,11 @@ urlUpdate ( route, location ) model =
 init : ( Route, Hop.Types.Location ) -> ( AppModel, Cmd Msg )
 init ( route, location ) =
     let
-        (compModel, compCmd) = Competitions.Update.init
-        model = newAppModel route location
+        ( compModel, compCmd ) =
+            Competitions.Update.init
+
+        model =
+            newAppModel route location
     in
         ( { model | competitions = compModel }, Cmd.map CompetitionsMsg compCmd )
 

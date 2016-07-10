@@ -17,9 +17,10 @@ type alias UpdateModel =
     , location : Location
     }
 
-init : (List Competition, Cmd Msg)
+
+init : ( List Competition, Cmd Msg )
 init =
-    ( [ {newCompetition | name = "-Laddar-", id = "1" }], loadEventorCompetitions)
+    ( [ { newCompetition | name = "-Laddar-", id = "1" } ], loadEventorCompetitions )
 
 
 routerConfig : Config Models.Route
@@ -47,9 +48,10 @@ update message model =
                 path =
                     Competitions.Routing.Utils.reverseWithPrefix (Competitions.Models.CompetitionsRoute)
             in
-                ( model, navigationCmd path)
+                ( model, navigationCmd path )
+
         FetchSucceed competitions ->
-            (UpdateModel competitions  model.location, Cmd.none)
+            ( UpdateModel competitions model.location, Cmd.none )
 
         FetchFail x ->
-            ((Debug.log (httpErrorMessage x) model), Cmd.none)
+            ( (Debug.log (httpErrorMessage x) model), Cmd.none )
