@@ -1,6 +1,5 @@
 module Update exposing (..)
 
-import Debug
 import Navigation
 import Hop exposing (makeUrl, makeUrlFromLocation, setQuery)
 import Hop.Types
