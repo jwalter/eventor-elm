@@ -5,8 +5,7 @@ import Competitions.Models exposing (Competition)
 
 
 type Route
-    = HomeRoute
-    | AboutRoute
+    = AboutRoute
     | CompetitionsRoutes Competitions.Models.Route
     | NotFoundRoute
 

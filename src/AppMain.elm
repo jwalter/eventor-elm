@@ -1,6 +1,8 @@
 module AppMain exposing (..)
 
 import Navigation
+import Task
+import Time
 import Hop exposing (matchUrl)
 import Hop.Types exposing (Router)
 import Messages exposing (..)
@@ -8,7 +10,6 @@ import Models exposing (..)
 import Update exposing (..)
 import View exposing (..)
 import Routing.Config
-import Competitions.Update
 
 
 urlParser : Navigation.Parser ( Route, Hop.Types.Location )
@@ -28,6 +29,12 @@ urlUpdate ( route, location ) model =
 init : ( Route, Hop.Types.Location ) -> ( AppModel, Cmd Msg )
 init ( route, location ) =
     let
+        model =
+            newAppModel route location
+    in
+        (model, (Task.perform TimeFailed TimeReceived Time.now))
+{-
+    let
         ( compModel, compCmd ) =
             Competitions.Update.init
 
@@ -35,7 +42,7 @@ init ( route, location ) =
             newAppModel route location
     in
         ( { model | competitions = compModel }, Cmd.map CompetitionsMsg compCmd )
-
+-}
 
 main : Program Never
 main =

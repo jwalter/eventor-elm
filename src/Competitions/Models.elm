@@ -1,5 +1,7 @@
 module Competitions.Models exposing (..)
 
+import Time exposing (Time)
+
 
 type alias Competition =
     { id : String
@@ -21,6 +23,12 @@ type alias Race =
 type alias Point =
     { x : String
     , y : String
+    }
+
+
+type alias CompetitionsFilter =
+    { from : Time
+    , to : Time
     }
 
 

@@ -44,16 +44,23 @@ update message model =
             in
                 ( model, navigationCmd path )
 
-        ShowHome ->
-            let
-                path =
-                    Routing.Utils.reverse HomeRoute
-            in
-                ( model, navigationCmd path )
-
         ShowAbout ->
             let
                 path =
                     Routing.Utils.reverse AboutRoute
             in
                 ( model, navigationCmd path )
+
+        TimeFailed msg ->
+            let
+                _ = Debug.log "TimeFailed" msg
+            in
+                ( model, Cmd.none )
+
+        TimeReceived time ->
+            let
+                ( compModel, compCmd ) =
+                    Competitions.Update.init time
+
+            in
+                ( { model | competitions = compModel }, Cmd.map CompetitionsMsg compCmd )

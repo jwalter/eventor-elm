@@ -2,6 +2,7 @@ module Competitions.Update exposing (..)
 
 import Debug
 import Navigation
+import Time exposing (Time)
 import Hop exposing (makeUrl, makeUrlFromLocation, addQuery, setQuery)
 import Hop.Types exposing (Config, Location)
 import Routing.Config
@@ -19,9 +20,13 @@ type alias UpdateModel =
     }
 
 
-init : ( List Competition, Cmd Msg )
-init =
-    ( [ { newCompetition | name = "-Laddar-", id = "1" } ], loadEventorCompetitions )
+init : Time -> ( List Competition, Cmd Msg )
+init now =
+    let
+        filter =
+            CompetitionsFilter (now - (7 * 24 * Time.hour)) (now + (28 * 24 * Time.hour))
+    in
+        ( [ { newCompetition | name = "-Laddar-", id = "1" } ], (loadEventorCompetitions filter) )
 
 
 initMock : ( List Competition, Cmd Msg )

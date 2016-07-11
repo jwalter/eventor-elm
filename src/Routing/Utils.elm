@@ -9,9 +9,6 @@ import Competitions.Routing.Utils
 reverse : Route -> String
 reverse route =
     case route of
-        HomeRoute ->
-            matcherToPath matcherHome []
-
         AboutRoute ->
             matcherToPath matcherAbout []
 
