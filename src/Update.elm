@@ -24,7 +24,7 @@ routerConfig =
 
 update : Msg -> AppModel -> ( AppModel, Cmd Msg )
 update message model =
-    case Debug.log "message" message of
+    case message of
         CompetitionsMsg subMessage ->
             let
                 updateModel =
@@ -50,17 +50,3 @@ update message model =
                     Routing.Utils.reverse AboutRoute
             in
                 ( model, navigationCmd path )
-
-        TimeFailed msg ->
-            let
-                _ = Debug.log "TimeFailed" msg
-            in
-                ( model, Cmd.none )
-
-        TimeReceived time ->
-            let
-                ( compModel, compCmd ) =
-                    Competitions.Update.init time
-
-            in
-                ( { model | competitions = compModel }, Cmd.map CompetitionsMsg compCmd )

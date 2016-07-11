@@ -1,12 +1,13 @@
 module Competitions.Load exposing (..)
 
-import Date exposing (Month)
+import Date
 import Http
 import Json.Decode exposing (list, Decoder, at)
 import Task
 import Time exposing (Time)
 import Competitions.Messages exposing (..)
 import Competitions.Models exposing (..)
+import Utils.Date as DateUtils
 import Eventor.Api exposing (fetchData)
 import Eventor.Decode exposing (competition)
 
@@ -14,69 +15,38 @@ import Eventor.Decode exposing (competition)
 -- HTTP
 
 
-loadEventorCompetitions : CompetitionsFilter -> Cmd Msg
-loadEventorCompetitions filter =
+loadEventorCompetitions : (Time -> CompetitionsFilter) -> Cmd Msg
+loadEventorCompetitions filterBuilder =
     let
-        fromDate = formatted filter.from
-        toDate = formatted filter.to
-        path =
-            "events?fromDate=" ++ fromDate ++ "&toDate=" ++ toDate ++ "&classificationIds=1,2,3,6"
+        pathBuilder time =
+            let
+                fromDate =
+                    formatted (filterBuilder time).from
+                toDate =
+                    formatted (filterBuilder time).to
+            in
+                "http://localhost:8080/api/events?fromDate=" ++ fromDate ++ "&toDate=" ++ toDate ++ "&classificationIds=1,2,3,6"
     in
-        loadEventorData path (at [ "EventList", "Event" ] (list competition))
+        loadEventorData pathBuilder (at [ "EventList", "Event" ] (list competition))
+
 
 formatted : Time -> String
 formatted time =
+    time
+        |> Date.fromTime
+        |> DateUtils.format
+
+
+loadEventorData : (Time -> String) -> Decoder (List Competition) -> Cmd Msg
+loadEventorData pathBuilder decoder =
     let
-        date = Date.fromTime time
+        httpTask time =
+            decodeUrlResponse (pathBuilder time) decoder
+
+        compoundTask =
+            Time.now `Task.andThen` \time -> httpTask time
     in
-        toString (Date.year date) ++ "-" ++ toString (monthNumber (Date.month date)) ++ "-" ++ toString (Date.day date)
-
-monthNumber : Month -> Int
-monthNumber month =
-    case month of
-        Date.Jan ->
-            1
-
-        Date.Feb ->
-            2
-
-        Date.Mar ->
-            3
-
-        Date.Apr ->
-            4
-
-        Date.May ->
-            5
-
-        Date.Jun ->
-            6
-
-        Date.Jul ->
-            7
-
-        Date.Aug ->
-            8
-
-        Date.Sep ->
-            9
-
-        Date.Oct ->
-            10
-
-        Date.Nov ->
-            11
-
-        Date.Dec ->
-            12
-      
-loadEventorData : String -> Decoder (List Competition) -> Cmd Msg
-loadEventorData path decoder =
-    let
-        url =
-            "http://localhost:8080/api/" ++ path
-    in
-        Task.perform FetchFail FetchSucceed (decodeUrlResponse url decoder)
+        Task.perform FetchFail FetchSucceed compoundTask
 
 
 decodeUrlResponse : String -> Decoder a -> Task.Task Http.Error a

@@ -1,14 +1,13 @@
 module AppMain exposing (..)
 
 import Navigation
-import Task
-import Time
 import Hop exposing (matchUrl)
 import Hop.Types exposing (Router)
 import Messages exposing (..)
 import Models exposing (..)
 import Update exposing (..)
 import View exposing (..)
+import Competitions.Update
 import Routing.Config
 
 
@@ -19,21 +18,11 @@ urlParser =
 
 urlUpdate : ( Route, Hop.Types.Location ) -> AppModel -> ( AppModel, Cmd Msg )
 urlUpdate ( route, location ) model =
-    let
-        _ =
-            Debug.log "urlUpdate location" location
-    in
-        ( { model | route = route, location = location }, Cmd.none )
+    ( { model | route = route, location = location }, Cmd.none )
 
 
 init : ( Route, Hop.Types.Location ) -> ( AppModel, Cmd Msg )
 init ( route, location ) =
-    let
-        model =
-            newAppModel route location
-    in
-        (model, (Task.perform TimeFailed TimeReceived Time.now))
-{-
     let
         ( compModel, compCmd ) =
             Competitions.Update.init
@@ -42,7 +31,7 @@ init ( route, location ) =
             newAppModel route location
     in
         ( { model | competitions = compModel }, Cmd.map CompetitionsMsg compCmd )
--}
+
 
 main : Program Never
 main =

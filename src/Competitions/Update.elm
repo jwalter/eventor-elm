@@ -20,13 +20,13 @@ type alias UpdateModel =
     }
 
 
-init : Time -> ( List Competition, Cmd Msg )
-init now =
+init : ( List Competition, Cmd Msg )
+init =
     let
-        filter =
-            CompetitionsFilter (now - (7 * 24 * Time.hour)) (now + (28 * 24 * Time.hour))
+        filterBuilder time =
+            CompetitionsFilter (time - (7 * 24 * Time.hour)) (time + (28 * 24 * Time.hour))
     in
-        ( [ { newCompetition | name = "-Laddar-", id = "1" } ], (loadEventorCompetitions filter) )
+        ( [ { newCompetition | name = "-Laddar-", id = "1" } ], (loadEventorCompetitions filterBuilder) )
 
 
 initMock : ( List Competition, Cmd Msg )
@@ -46,7 +46,7 @@ navigationCmd path =
 
 update : Msg -> UpdateModel -> ( UpdateModel, Cmd Msg )
 update message model =
-    case Debug.log "message" message of
+    case message of
         Show id ->
             let
                 path =
