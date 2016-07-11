@@ -15,7 +15,7 @@ config =
 
 reverseWithPrefix : Route -> String
 reverseWithPrefix route =
-    "/competitions" ++ (reverse route)
+    "" ++ (reverse route)
 
 
 reverse : Route -> String

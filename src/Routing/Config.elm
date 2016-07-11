@@ -6,11 +6,6 @@ import Models exposing (..)
 import Competitions.Routing.Config
 
 
-matcherHome : PathMatcher Route
-matcherHome =
-    match1 HomeRoute ""
-
-
 matcherAbout : PathMatcher Route
 matcherAbout =
     match1 AboutRoute "/about"
@@ -18,13 +13,12 @@ matcherAbout =
 
 matchersCompetitions : PathMatcher Route
 matchersCompetitions =
-    nested1 CompetitionsRoutes "/competitions" Competitions.Routing.Config.matchers
+    nested1 CompetitionsRoutes "" Competitions.Routing.Config.matchers
 
 
 matchers : List (PathMatcher Route)
 matchers =
-    [ matcherHome
-    , matcherAbout
+    [ matcherAbout
     , matchersCompetitions
     ]
 

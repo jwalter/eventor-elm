@@ -19,18 +19,14 @@ view model =
 
 menu : AppModel -> Html Msg
 menu model =
-    div [ class "p2 white bg-black" ]
-        [ div []
-            [ menuLink ShowHome "btnHome" "Home"
-            , text "|"
-            , menuLink ShowCompetitions "btnCompetitions" "Competitions"
-            , text "|"
-            , menuLink ShowAbout "btnAbout" "About"
+    div [ class "fixed top-0 left-0 right-0 p2 white bg-blue" ]
+        [ div [ class "center" ]
+            [ text "Eventor"
             ]
         ]
 
 
-menuLink : Msg -> String -> String -> Html Msg
+menuLink : Msg -> String -> Html Msg -> Html Msg
 menuLink message viewId label =
     a
         [ id viewId
@@ -38,14 +34,14 @@ menuLink message viewId label =
         , onClick message
         , class "white px2"
         ]
-        [ text label ]
+        [ label ]
 
 
 pageView : AppModel -> Html Msg
 pageView model =
     case model.route of
         HomeRoute ->
-            div [ class "p2" ]
+            div [ class "p2 mt4" ]
                 [ h1 [ id "title", class "m0" ] [ text "Home" ]
                 , div [] [ text "Click on Competitions to start routing" ]
                 ]
@@ -63,7 +59,7 @@ pageView model =
                     , location = model.location
                     }
             in
-                div [ class "p2" ]
+                div [ class "mt4 p2" ]
                     [ Html.App.map CompetitionsMsg (Competitions.View.view viewModel)
                     ]
 

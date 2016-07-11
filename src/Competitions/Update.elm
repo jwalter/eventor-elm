@@ -7,6 +7,7 @@ import Hop.Types exposing (Config, Location)
 import Routing.Config
 import Models
 import Competitions.Load exposing (..)
+import Competitions.Mock exposing (..)
 import Competitions.Models exposing (..)
 import Competitions.Messages exposing (Msg(..))
 import Competitions.Routing.Utils
@@ -21,6 +22,11 @@ type alias UpdateModel =
 init : ( List Competition, Cmd Msg )
 init =
     ( [ { newCompetition | name = "-Laddar-", id = "1" } ], loadEventorCompetitions )
+
+
+initMock : ( List Competition, Cmd Msg )
+initMock =
+    ( Competitions.Mock.competitions, Cmd.none )
 
 
 routerConfig : Config Models.Route
