@@ -1,7 +1,6 @@
 module Competitions.View exposing (..)
 
 import Html exposing (..)
-import Html.Attributes exposing (href, style)
 import Hop.Types exposing (Location)
 import Competitions.Models exposing (Competition, Route, Route(..))
 import Competitions.Messages exposing (..)
@@ -18,9 +17,7 @@ type alias ViewModel =
 
 view : ViewModel -> Html Msg
 view model =
-    div []
-        [ subView model
-        ]
+    subView model
 
 
 subView : ViewModel -> Html Msg

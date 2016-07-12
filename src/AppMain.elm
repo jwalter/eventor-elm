@@ -3,6 +3,7 @@ module AppMain exposing (..)
 import Navigation
 import Hop exposing (matchUrl)
 import Hop.Types exposing (Router)
+import Material.Layout as Layout
 import Messages exposing (..)
 import Models exposing (..)
 import Update exposing (..)
@@ -19,7 +20,6 @@ urlParser =
 urlUpdate : ( Route, Hop.Types.Location ) -> AppModel -> ( AppModel, Cmd Msg )
 urlUpdate ( route, location ) model =
     ( { model | route = route, location = location }, Cmd.none )
-
 
 init : ( Route, Hop.Types.Location ) -> ( AppModel, Cmd Msg )
 init ( route, location ) =
@@ -40,5 +40,5 @@ main =
         , view = view
         , update = update
         , urlUpdate = urlUpdate
-        , subscriptions = (always Sub.none)
+        , subscriptions = .mdl >> Layout.subs MDL
         }

@@ -1,4 +1,4 @@
-module Competitions.Load exposing (..)
+module Competitions.Load exposing (loadEventorCompetitions)
 
 import Date
 import Http
@@ -22,10 +22,11 @@ loadEventorCompetitions filterBuilder =
             let
                 fromDate =
                     formatted (filterBuilder time).from
+
                 toDate =
                     formatted (filterBuilder time).to
             in
-                "http://localhost:8080/api/events?fromDate=" ++ fromDate ++ "&toDate=" ++ toDate ++ "&classificationIds=1,2,3,6"
+                "https://eventor-proxy-kxfcsvyyhv.now.sh/api/events?fromDate=" ++ fromDate ++ "&toDate=" ++ toDate ++ "&classificationIds=1,2,3,6"
     in
         loadEventorData pathBuilder (at [ "EventList", "Event" ] (list competition))
 
@@ -52,19 +53,3 @@ loadEventorData pathBuilder decoder =
 decodeUrlResponse : String -> Decoder a -> Task.Task Http.Error a
 decodeUrlResponse url decoder =
     Http.fromJson decoder (fetchData url)
-
-
-httpErrorMessage : Http.Error -> String
-httpErrorMessage error =
-    case error of
-        Http.Timeout ->
-            "Timeout"
-
-        Http.NetworkError ->
-            "Network error"
-
-        Http.UnexpectedPayload s ->
-            "Unexpected payload: " ++ s
-
-        Http.BadResponse n s ->
-            "Bad response"

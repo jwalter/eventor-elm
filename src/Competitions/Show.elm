@@ -17,7 +17,7 @@ styles =
 view : Competition -> Html Msg
 view competition =
     div [ styles ]
-        [ h3 [ ] [ text competition.name ]
+        [ h4 [ ] [ text competition.name ]
         , div [ class "mb2 h5" ] [ text competition.startDate ]
-        , button [ onClick ShowAll, class "btn not-rounded white bg-blue" ] [ text "Tillbaka" ]
+        , button [ onClick ShowAll, class "mdl-button mdl-button--raised" ] [ text "Tillbaka" ]
         ]

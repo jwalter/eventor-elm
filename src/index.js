@@ -1,7 +1,6 @@
 'use strict';
 
-require('ace-css/css/ace.min.css');
-require('../public/style.css');
+require('./styles/main.styl');
 
 require('./index.html');
 

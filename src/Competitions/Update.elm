@@ -12,6 +12,7 @@ import Competitions.Mock exposing (..)
 import Competitions.Models exposing (..)
 import Competitions.Messages exposing (Msg(..))
 import Competitions.Routing.Utils
+import Utils.Http as HttpUtils
 
 
 type alias UpdateModel =
@@ -65,4 +66,4 @@ update message model =
             ( UpdateModel competitions model.location, Cmd.none )
 
         FetchFail x ->
-            ( (Debug.log (httpErrorMessage x) model), Cmd.none )
+            ( (Debug.log (HttpUtils.messageToString x) model), Cmd.none )

@@ -32,10 +32,7 @@ view model =
                 |> withHeaderInfo
                 |> asRaceTableRows
     in
-        div []
-            [ table []
-                [ tbody [] rows ]
-            ]
+        table [] [ tbody [] rows ]
 
 
 sortedByStartDate : List Race -> List Race

@@ -3,6 +3,7 @@ module Update exposing (..)
 import Navigation
 import Hop exposing (makeUrl, makeUrlFromLocation, setQuery)
 import Hop.Types
+import Material
 import Messages exposing (..)
 import Models exposing (..)
 import Routing.Config
@@ -49,3 +50,5 @@ update message model =
                     Routing.Utils.reverse AboutRoute
             in
                 ( model, navigationCmd path )
+        MDL action' ->
+            Material.update MDL action' model

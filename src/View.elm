@@ -5,25 +5,31 @@ import Html.App
 import Html.Events exposing (onClick)
 import Html.Attributes exposing (id, class, href, style)
 import Models exposing (..)
+import Material.Layout as Layout
+import Material.Scheme
 import Messages exposing (..)
 import Competitions.View
 
 
 view : AppModel -> Html Msg
 view model =
-    div []
-        [ menu model
-        , pageView model
-        ]
+    Layout.render MDL
+        model.mdl
+        [ Layout.fixedHeader ]
+        { header = myHeader
+        , drawer = []
+        , tabs = ( [], [] )
+        , main = [ pageView model ]
+        }
+        |> Material.Scheme.top
 
 
-menu : AppModel -> Html Msg
-menu model =
-    div [ class "fixed top-0 left-0 right-0 p2 white bg-blue" ]
-        [ div [ class "center" ]
-            [ text "Eventor"
-            ]
+myHeader : List (Html Msg)
+myHeader =
+    [ div [ class "mdl-layout__header-row" ]
+        [ span [ class "mdl-layout-title" ] [ text "Eventor" ]
         ]
+    ]
 
 
 menuLink : Msg -> String -> Html Msg -> Html Msg
@@ -40,12 +46,6 @@ menuLink message viewId label =
 pageView : AppModel -> Html Msg
 pageView model =
     case model.route of
-        HomeRoute ->
-            div [ class "p2 mt4" ]
-                [ h1 [ id "title", class "m0" ] [ text "Home" ]
-                , div [] [ text "Click on Competitions to start routing" ]
-                ]
-
         AboutRoute ->
             div [ class "p2" ]
                 [ h1 [ id "title", class "m0" ] [ text "About" ]
@@ -59,8 +59,10 @@ pageView model =
                     , location = model.location
                     }
             in
-                div [ class "mt4 p2" ]
-                    [ Html.App.map CompetitionsMsg (Competitions.View.view viewModel)
+                div [ class "mdl-layout__content" ]
+                    [ div [ class "page-content" ]
+                        [ Html.App.map CompetitionsMsg (Competitions.View.view viewModel)
+                        ]
                     ]
 
         NotFoundRoute ->
