@@ -4,7 +4,7 @@
   "description": "",
   "main": "elm.js",
   "scripts": {
-    "build": "webpack",
+    "build": "webpack -p",
     "watch": "webpack --watch",
     "dev": "webpack-dev-server --port 3000 --host 0.0.0.0 --hot --inline"
   },
