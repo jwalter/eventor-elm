@@ -1,4 +1,4 @@
-module Competitions.Models exposing (Competition, Race, LightCondition(..), Distance(..), Point, newCompetition)
+module Competitions.Models exposing (Competition, CompetitionsFilter, Race, LightCondition(..), Distance(..), Point, newCompetition, Route(..))
 
 import Time exposing (Time)
 

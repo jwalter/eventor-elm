@@ -5,6 +5,7 @@ import Navigation
 import Time exposing (Time)
 import Hop exposing (makeUrl, makeUrlFromLocation, addQuery, setQuery)
 import Hop.Types exposing (Config, Location)
+import Material
 import Routing.Config
 import Models
 import Competitions.Load exposing (..)
@@ -18,8 +19,15 @@ import Utils.Http as HttpUtils
 type alias UpdateModel =
     { competitions : List Competition
     , location : Location
+    , mdl : Material.Model
     }
 
+updateModel : List Competition -> Location -> UpdateModel
+updateModel competitions location =
+    { competitions = competitions
+    , location = location
+    , mdl = Material.model
+    }
 
 init : ( List Competition, Cmd Msg )
 init =
@@ -63,7 +71,10 @@ update message model =
                 ( model, navigationCmd path )
 
         FetchSucceed competitions ->
-            ( UpdateModel competitions model.location, Cmd.none )
+            ( updateModel competitions model.location, Cmd.none )
 
         FetchFail x ->
             ( (Debug.log (HttpUtils.messageToString x) model), Cmd.none )
+
+        MDL action' ->
+            Material.update MDL action' model

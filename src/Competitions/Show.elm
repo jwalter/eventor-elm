@@ -7,19 +7,12 @@ import Competitions.Models exposing (..)
 import Competitions.Messages exposing (..)
 
 
-buttonStyles : Html.Attribute a
-buttonStyles =
-    style
-        [ ( "margin", "10px" ) ]
-
-
 view : Competition -> Html Msg
 view competition =
     div []
         [ h4 [] [ text competition.name ]
         , div [ class "mb2 h5" ] [ text competition.startDate ]
         , viewRaces competition.races
-        , button [ onClick ShowAll, buttonStyles, class "mdl-button mdl-button--raised" ] [ text "Tillbaka" ]
         ]
 
 
