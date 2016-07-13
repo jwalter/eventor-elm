@@ -6,7 +6,6 @@ import Html.Events exposing (onClick)
 import Html.Attributes exposing (id, class, href, style)
 import Models exposing (..)
 import Material.Layout as Layout
-import Material.Scheme
 import Messages exposing (..)
 import Competitions.View
 
@@ -21,7 +20,6 @@ view model =
         , tabs = ( [], [] )
         , main = [ pageView model ]
         }
-        |> Material.Scheme.top
 
 
 myHeader : List (Html Msg)
@@ -59,7 +57,7 @@ pageView model =
                     , location = model.location
                     }
             in
-                div [ class "mdl-layout__content" ]
+                div [ style [("margin", "10px")], class "mdl-layout__content" ]
                     [ div [ class "page-content" ]
                         [ Html.App.map CompetitionsMsg (Competitions.View.view viewModel)
                         ]

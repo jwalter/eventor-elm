@@ -1,6 +1,6 @@
 'use strict';
 
-require('./styles/main.styl');
+require('./styles/style.css');
 
 require('./index.html');
 

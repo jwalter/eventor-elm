@@ -1,9 +1,9 @@
 module Eventor.Decode exposing (competition, race)
 
-import Json.Decode exposing (string, int, list, at, map, oneOf, maybe, Decoder, decodeString, (:=))
-import Json.Decode.Pipeline exposing (decode, required, optional, hardcoded)
+import Json.Decode exposing (string, int, list, at, map, oneOf, maybe, Decoder, decodeString, (:=), andThen)
+import Json.Decode.Pipeline exposing (decode, required, requiredAt, optional, custom)
 import Eventor.JsonSupport exposing (insideList)
-import Competitions.Models exposing (Competition, Race, Point)
+import Competitions.Models exposing (Competition, Race, Point, LightCondition(..), Distance(..))
 
 
 race : Decoder Race
@@ -13,6 +13,63 @@ race =
         |> required "Name" nameDecoderTwo
         |> required "RaceDate" dateDecoder
         |> optional "EventCenterPosition" (insideList (Point "" "") (at [ "$" ] pointDecoder)) (Point "" "")
+        |> requiredAt [ "$", "raceLightCondition" ] lightCondition
+        |> requiredAt [ "$", "raceDistance" ] distance
+
+
+lightCondition : Decoder LightCondition
+lightCondition =
+    let
+        decodeToType : String -> Decoder LightCondition
+        decodeToType str =
+            case str of
+                "Day" ->
+                    decode Day
+
+                "Night" ->
+                    decode Night
+
+                "DayAndNight" ->
+                    decode DayAndNight
+
+                _ ->
+                    decode UnknownCondition
+    in
+        string `andThen` decodeToType
+
+foo: String -> LightCondition
+foo s =
+    case s of
+        "Day" -> Day
+        _ -> UnknownCondition
+        
+distance : Decoder Distance
+distance =
+    let
+        stringToDistance str =
+            case str of
+                "Middle" ->
+                    decode Middle
+
+                "Long" ->
+                    decode Long
+
+                "Sprint" ->
+                    decode Sprint
+
+                "UltraLong" ->
+                    decode UltraLong
+
+                "PreO" ->
+                    decode PreO
+
+                "TempO" ->
+                    decode TempO
+
+                _ ->
+                    decode UnknownDistance
+    in
+        string `andThen` stringToDistance
 
 
 competition : Decoder Competition

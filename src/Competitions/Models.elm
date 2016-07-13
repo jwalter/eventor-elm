@@ -1,4 +1,4 @@
-module Competitions.Models exposing (..)
+module Competitions.Models exposing (Competition, Race, LightCondition(..), Distance(..), Point, newCompetition)
 
 import Time exposing (Time)
 
@@ -17,7 +17,26 @@ type alias Race =
     , name : String
     , startDate : String
     , position : Point
+    , lightCondition : LightCondition
+    , distance : Distance
     }
+
+
+type LightCondition
+    = Day
+    | Night
+    | DayAndNight
+    | UnknownCondition
+
+
+type Distance
+    = Middle
+    | Long
+    | Sprint
+    | UltraLong
+    | PreO
+    | TempO
+    | UnknownDistance
 
 
 type alias Point =
