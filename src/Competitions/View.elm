@@ -75,7 +75,7 @@ headerRow model =
         CompetitionRoute id ->
             Layout.row [ (Options.css "transition" "background .15s"), Options.css "background-color" "white" ]
                 [ backButton model
-                , Layout.title [ Options.css "color" "black" ] [ text ("Eventor") ]
+                , Layout.title [ Options.css "color" "black" ] [ text ("Tillbaka") ]
                 ]
 
         _ ->

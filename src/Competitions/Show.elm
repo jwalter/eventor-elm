@@ -2,14 +2,14 @@ module Competitions.Show exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (id, href, style, src, class)
-import Html.Events exposing (onClick)
+import Material.Options as Options
 import Competitions.Models exposing (..)
 import Competitions.Messages exposing (..)
 
 
 view : Competition -> Html Msg
 view competition =
-    div []
+    Options.div [Options.css "padding" "10px"]
         [ h4 [] [ text competition.name ]
         , div [ class "mb2 h5" ] [ text competition.startDate ]
         , viewRaces competition.races

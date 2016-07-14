@@ -2,7 +2,7 @@ module Competitions.List exposing (..)
 
 import Date exposing (Month)
 import Html exposing (..)
-import Html.Attributes exposing (class, href)
+import Html.Attributes exposing (class, href, style)
 import Html.Events exposing (onClick)
 import String
 import Hop.Types exposing (Location)
@@ -38,7 +38,7 @@ view model =
         Helpers.filter (Options.div)
             []
             [ progress model
-            , Just (table [] [ tbody [] rows ])
+            , Just (table [style [("padding", "10px")]] [ tbody [] rows ])
             ]
 
 
