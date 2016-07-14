@@ -22,6 +22,7 @@ type alias UpdateModel =
     , mdl : Material.Model
     }
 
+
 updateModel : List Competition -> Location -> UpdateModel
 updateModel competitions location =
     { competitions = competitions
@@ -29,13 +30,14 @@ updateModel competitions location =
     , mdl = Material.model
     }
 
+
 init : ( List Competition, Cmd Msg )
 init =
     let
         filterBuilder time =
             CompetitionsFilter (time - (7 * 24 * Time.hour)) (time + (28 * 24 * Time.hour))
     in
-        ( [ { newCompetition | name = "-Laddar-", id = "1" } ], (loadEventorCompetitions filterBuilder) )
+        ( [], (loadEventorCompetitions filterBuilder) )
 
 
 initMock : ( List Competition, Cmd Msg )

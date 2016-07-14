@@ -2,14 +2,9 @@ module View exposing (..)
 
 import Html exposing (..)
 import Html.App
-import Html.Events exposing (onClick)
 import Html.Attributes exposing (id, class, href, style)
-import String
 import Models exposing (..)
-import Material.Button as Button
-import Material.Icon as Icon
 import Material.Layout as Layout
-import Material.Options as Options
 import Messages exposing (..)
 import Competitions.Models
 import Competitions.View
@@ -50,10 +45,8 @@ pageView model =
                 viewModel =
                     competitionsModel model competitionsRoute
             in
-                div [ id (toString model.route), style [ ( "margin", "10px" ) ], class "mdl-layout__content" ]
-                    [ div [ class "page-content" ]
-                        [ Html.App.map CompetitionsMsg (Competitions.View.view viewModel)
-                        ]
+                div [ class "page-content" ]
+                    [ Html.App.map CompetitionsMsg (Competitions.View.view viewModel)
                     ]
 
         NotFoundRoute ->

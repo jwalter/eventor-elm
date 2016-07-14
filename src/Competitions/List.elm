@@ -6,6 +6,9 @@ import Html.Attributes exposing (class, href)
 import Html.Events exposing (onClick)
 import String
 import Hop.Types exposing (Location)
+import Material.Helpers as Helpers
+import Material.Options as Options
+import Material.Progress as Progress
 import Competitions.Models exposing (..)
 import Competitions.Messages exposing (..)
 
@@ -32,7 +35,19 @@ view model =
                 |> withHeaderInfo
                 |> asRaceTableRows
     in
-        table [] [ tbody [] rows ]
+        Helpers.filter (Options.div)
+            []
+            [ progress model
+            , Just (table [] [ tbody [] rows ])
+            ]
+
+
+progress : ViewModel -> Maybe (Html Msg)
+progress model =
+    if List.length model.competitions > 0 then
+        Nothing
+    else
+        Just Progress.indeterminate
 
 
 sortedByStartDate : List Race -> List Race
