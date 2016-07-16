@@ -78,6 +78,7 @@ type alias PersonStart =
     { person : Person
     , organisation : Organisation
     , raceStart : RaceStart
+    , matchesFilter : Bool
     }
 
 

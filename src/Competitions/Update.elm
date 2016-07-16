@@ -2,6 +2,7 @@ module Competitions.Update exposing (..)
 
 import Debug
 import Navigation
+import String
 import Time exposing (Time)
 import Hop exposing (makeUrl, makeUrlFromLocation, addQuery, setQuery)
 import Hop.Types exposing (Config, Location)
@@ -40,11 +41,15 @@ init =
     in
         ( [], (loadEventorCompetitions filterBuilder) )
 
-{-}
-initMock : ( List Competition, Cmd Msg )
-initMock =
-    ( Competitions.Mock.competitions, Cmd.none )
---}
+
+
+{- }
+   initMock : ( List Competition, Cmd Msg )
+   initMock =
+       ( Competitions.Mock.competitions, Cmd.none )
+   -
+-}
+
 
 initStartList : StartList -> CompetitionId -> ( StartList, Cmd Msg )
 initStartList startList competitionId =
@@ -69,15 +74,18 @@ initStartList startList competitionId =
             Loading ->
                 ( startList, Cmd.none )
 
-{-}
-loadMockStarts : CompetitionId -> RaceId -> StartList
-loadMockStarts competitionId raceId =
-    let
-        _ =
-            Debug.log "loadMockStarts" ""
-    in
-        Competitions.Mock.startList raceId
+
+
+{- }
+   loadMockStarts : CompetitionId -> RaceId -> StartList
+   loadMockStarts competitionId raceId =
+       let
+           _ =
+               Debug.log "loadMockStarts" ""
+       in
+           Competitions.Mock.startList raceId
 -}
+
 
 routerConfig : Config Models.Route
 routerConfig =
@@ -118,6 +126,9 @@ update message model =
             in
                 ( { model | startList = newStartList }, Cmd.batch [ startListCmd, navigationCmd path ] )
 
+        FilterStartList queryString ->
+            ( { model | startList = (filterStartList model.startList queryString) }, Cmd.none )
+
         FetchSucceed competitions ->
             ( updateModel competitions model.startList model.location model.mdl, Cmd.none )
 
@@ -129,3 +140,39 @@ update message model =
 
         MDL msg' ->
             Material.update MDL msg' model
+
+
+filterStartList : StartList -> String -> StartList
+filterStartList startList queryString =
+    case startList of
+        Loaded id classStarts ->
+            Loaded id (filterClassStarts classStarts queryString)
+
+        _ ->
+            startList
+
+
+filterClassStarts : List ClassStart -> String -> List ClassStart
+filterClassStarts starts query =
+    List.map (filterClassStart query) starts
+
+
+filterClassStart : String -> ClassStart -> ClassStart
+filterClassStart query start =
+    { start | personStarts = (filterPersonStarts query start.personStarts) }
+
+
+filterPersonStarts : String -> List PersonStart -> List PersonStart
+filterPersonStarts query personStarts =
+    List.map (personMatches query) personStarts
+
+
+personMatches : String -> PersonStart -> PersonStart
+personMatches query personStart =
+    let
+        match =
+            (String.contains query personStart.person.name.given)
+            || (String.contains query personStart.person.name.family)
+            || (String.contains query personStart.organisation.name)
+    in
+        { personStart | matchesFilter = match }

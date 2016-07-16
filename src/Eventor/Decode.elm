@@ -58,6 +58,7 @@ personStart =
         |> required "Person" (insideList emptyPerson person)
         |> optional "Organisation" (insideList emptyOrganisation organisation) emptyOrganisation
         |> optional "Start" (insideList emptyRaceStart raceStart) emptyRaceStart
+        |> hardcoded True
 
 person : Decoder Person
 person =

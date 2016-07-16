@@ -4,17 +4,19 @@ import Html exposing (..)
 import Html.Attributes exposing (style, src)
 import Material
 import Material.Button as Button
+import Material.Helpers as Helpers
 import Material.Icon as Icon
 import Material.Layout as Layout
 import Material.Options as Options
 import Material.Progress as Progress
 import Material.Table as Table
+import Material.Textfield as Textfield
 import Competitions.Models exposing (..)
 import Competitions.Messages exposing (..)
 
 
-view : StartList -> String -> Html Msg
-view startList raceId =
+view : StartList -> Material.Model -> String -> Html Msg
+view startList mdl raceId =
     case startList of
         Loaded competitionId classStarts ->
             let
@@ -24,37 +26,53 @@ view startList raceId =
                         |> List.sortBy (\cs -> cs.eventClass.sortOrder)
             in
                 Options.div [ Options.css "padding" "10px" ]
-                    [ Options.div [] (List.map viewClassStart starts)
+                    [ Textfield.render MDL
+                        [ 0 ]
+                        mdl
+                        [ Textfield.label "Sök..."
+                        , Textfield.onInput FilterStartList
+                        ]
+                    , Helpers.filter Options.div [] (List.map viewClassStart starts)
                     ]
 
         Empty ->
             text "Startlista saknas"
 
         Loading ->
-            Options.div [ Options.css "width" "100%"]
+            Options.div [ Options.css "width" "100%" ]
                 [ Progress.indeterminate
                 ]
 
 
-viewClassStart : ClassStart -> Html Msg
+viewClassStart : ClassStart -> Maybe (Html Msg)
 viewClassStart classStart =
-    Options.div []
-        [ h4 [ style [ ( "margin-bottom", "0px" ) ] ] [ text classStart.eventClass.className ]
-        , h6 [ style [ ( "margin-top", "0px" ) ] ] [ text (classStart.numberOfEntries ++ " startande") ]
-        , Table.table [ Options.css "width" "100%" ]
-            [ Table.thead [ tableStyles ]
-                [ Table.th [ tableStyles ] [ text "Nummerlapp" ]
-                , Table.th [ tableStyles ] [ text "Namn" ]
-                , Table.th [ tableStyles ] []
-                , Table.th [ tableStyles ] [ text "Starttid" ]
-                ]
-            , Table.tbody []
-                (classStart.personStarts
-                    |> List.sortBy (\ps -> ps.raceStart.startTime)
-                    |> List.map personStartRow
+    let
+        personStarts =
+            classStart.personStarts
+                |> List.filter (\ps -> ps.matchesFilter)
+                |> List.sortBy (\ps -> ps.raceStart.startTime)
+    in
+        if List.length personStarts == 0 then
+            Nothing
+        else
+            Just
+                (Options.div []
+                    [ h4 [ style [ ( "margin-bottom", "0px" ) ] ] [ text classStart.eventClass.className ]
+                    , h6 [ style [ ( "margin-top", "0px" ) ] ] [ text (classStart.numberOfEntries ++ " startande") ]
+                    , Table.table [ Options.css "width" "100%" ]
+                        [ Table.thead [ tableStyles ]
+                            [ Table.th [ tableStyles ] [ text "Nummerlapp" ]
+                            , Table.th [ tableStyles ] [ text "Namn" ]
+                            , Table.th [ tableStyles ] []
+                            , Table.th [ tableStyles ] [ text "Starttid" ]
+                            ]
+                        , Table.tbody []
+                            (personStarts
+                                |> List.map personStartRow
+                            )
+                        ]
+                    ]
                 )
-            ]
-        ]
 
 
 personStartRow : PersonStart -> Html Msg

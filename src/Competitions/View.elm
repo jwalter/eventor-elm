@@ -55,7 +55,7 @@ subView model =
             Competitions.List.view (Competitions.List.viewModel model.competitions model.location)
 
         StartListRoute competitionId raceId ->
-            Competitions.StartList.view model.startList raceId
+            Competitions.StartList.view model.startList model.mdl raceId
 
         NotFoundRoute ->
             notFoundView model
