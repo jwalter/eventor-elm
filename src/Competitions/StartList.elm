@@ -7,6 +7,7 @@ import Material.Button as Button
 import Material.Icon as Icon
 import Material.Layout as Layout
 import Material.Options as Options
+import Material.Progress as Progress
 import Material.Table as Table
 import Competitions.Models exposing (..)
 import Competitions.Messages exposing (..)
@@ -30,7 +31,9 @@ view startList raceId =
             text "Startlista saknas"
 
         Loading ->
-            text "Laddar"
+            Options.div [ Options.css "width" "100%"]
+                [ Progress.indeterminate
+                ]
 
 
 viewClassStart : ClassStart -> Html Msg
