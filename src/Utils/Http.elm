@@ -1,6 +1,7 @@
 module Utils.Http exposing (messageToString)
 
 import Http
+import String
 
 messageToString : Http.Error -> String
 messageToString error =
@@ -12,7 +13,7 @@ messageToString error =
             "Network error"
 
         Http.UnexpectedPayload s ->
-            "Unexpected payload: " ++ s
+            "Unexpected payload: " ++ (String.left 500 s)
 
         Http.BadResponse n s ->
             "Bad response"

@@ -12,9 +12,12 @@ matcherCompetitions =
 
 matcherCompetition : PathMatcher Route
 matcherCompetition =
-    match2 CompetitionRoute "/" str
+    match2 CompetitionRoute "/event/" str
 
+matcherStartList : PathMatcher Route
+matcherStartList =
+    match4 StartListRoute "/event/" str "/race/" str
 
 matchers : List (PathMatcher Route)
 matchers =
-    [ matcherCompetitions, matcherCompetition ]
+    [ matcherCompetitions, matcherCompetition, matcherStartList ]

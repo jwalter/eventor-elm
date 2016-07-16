@@ -29,13 +29,15 @@ update message model =
             let
                 updateModel =
                     { competitions = model.competitions
+                    , startList = model.startList
                     , location = model.location
+                    , mdl = model.mdl
                     }
 
                 ( updatedModel, cmd ) =
                     Competitions.Update.update subMessage updateModel
             in
-                ( { model | competitions = updatedModel.competitions }, Cmd.map CompetitionsMsg cmd )
+                ( { model | competitions = updatedModel.competitions, startList = updatedModel.startList, mdl = updatedModel.mdl }, Cmd.map CompetitionsMsg cmd )
 
         ShowCompetitions ->
             let
@@ -50,5 +52,6 @@ update message model =
                     Routing.Utils.reverse AboutRoute
             in
                 ( model, navigationCmd path )
+
         MDL action' ->
             Material.update MDL action' model

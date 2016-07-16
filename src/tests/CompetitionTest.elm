@@ -1,25 +1,29 @@
+module Main exposing (..)
+
 import Html exposing (text)
 import Json.Decode exposing (string, int, list, at, map, Decoder, decodeString)
-
 import Competitions.Models exposing (Competition)
 import Eventor.Decode exposing (competition)
 
 
 main : Html.Html Never
 main =
-  let
-    name = decodedName
-  in
-    case name of
-      Ok value ->
-        text (toString value)
-      Err msg ->
-       text ("Error: " ++ msg)
+    let
+        name =
+            decodedName
+    in
+        case name of
+            Ok value ->
+                text (toString value)
+
+            Err msg ->
+                text ("Error: " ++ msg)
+
 
 decodedName : Result String Competition
 decodedName =
-  decodeString
-      competition
+    decodeString
+        competition
         """
    {
     "$": {

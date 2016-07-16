@@ -6,6 +6,7 @@ import Html.Attributes exposing (class, href, style)
 import Html.Events exposing (onClick)
 import String
 import Hop.Types exposing (Location)
+import Material
 import Material.Helpers as Helpers
 import Material.Options as Options
 import Material.Progress as Progress
@@ -16,12 +17,21 @@ import Competitions.Messages exposing (..)
 type alias ViewModel =
     { competitions : List Competition
     , location : Location
+    , mdl : Material.Model
     }
 
 
 type alias TableRow =
     { race : Race
     , header : Maybe String
+    }
+
+
+viewModel : List Competition -> Location -> ViewModel
+viewModel competitions location =
+    { competitions = competitions
+    , location = location
+    , mdl = Material.model
     }
 
 
@@ -38,7 +48,7 @@ view model =
         Helpers.filter (Options.div)
             []
             [ progress model
-            , Just (table [style [("padding", "10px")]] [ tbody [] rows ])
+            , Just (table [ style [ ( "padding", "10px" ) ] ] [ tbody [] rows ])
             ]
 
 

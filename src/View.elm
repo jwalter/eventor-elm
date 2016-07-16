@@ -5,6 +5,7 @@ import Html.App
 import Html.Attributes exposing (id, class, href, style)
 import Models exposing (..)
 import Material.Layout as Layout
+import Material.Menu as Menu
 import Messages exposing (..)
 import Competitions.Models
 import Competitions.View
@@ -36,8 +37,16 @@ pageView : AppModel -> Html Msg
 pageView model =
     case model.route of
         AboutRoute ->
-            div [ class "p2" ]
+            div [ ]
                 [ h1 [ id "title", class "m0" ] [ text "About" ]
+                , (Menu.render MDL
+                    [ 0 ]
+                    model.mdl
+                    [ Menu.ripple
+                    ]
+                    [ Menu.Item False True <| text "Startlista"
+                    ]
+                  )
                 ]
 
         CompetitionsRoutes competitionsRoute ->
@@ -55,7 +64,7 @@ pageView model =
 
 competitionsModel : AppModel -> Competitions.Models.Route -> Competitions.View.ViewModel
 competitionsModel model route =
-    Competitions.View.model model.competitions model.location route
+    Competitions.View.model model.competitions model.startList model.location route model.mdl
 
 
 notFoundView : AppModel -> Html msg

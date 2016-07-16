@@ -1,4 +1,4 @@
-module Competitions.Load exposing (loadEventorCompetitions)
+module Competitions.Load exposing (loadEventorCompetitions, loadEventorStartList)
 
 import Date
 import Http
@@ -9,10 +9,16 @@ import Competitions.Messages exposing (..)
 import Competitions.Models exposing (..)
 import Utils.Date as DateUtils
 import Eventor.Api exposing (fetchData)
-import Eventor.Decode exposing (competition)
+import Eventor.Decode exposing (competition, startList)
 
 
 -- HTTP
+
+
+baseUrl : String
+baseUrl =
+    --"http://airnst.local:8080/api/"
+    "https://eventor-proxy-kxfcsvyyhv.now.sh/api/"
 
 
 loadEventorCompetitions : (Time -> CompetitionsFilter) -> Cmd Msg
@@ -26,9 +32,18 @@ loadEventorCompetitions filterBuilder =
                 toDate =
                     formatted (filterBuilder time).to
             in
-                "https://eventor-proxy-kxfcsvyyhv.now.sh/api/events?fromDate=" ++ fromDate ++ "&toDate=" ++ toDate ++ "&classificationIds=1,2,3,6"
+                baseUrl ++ "events?fromDate=" ++ fromDate ++ "&toDate=" ++ toDate ++ "&classificationIds=1,2,3,6"
     in
-        loadEventorData pathBuilder (at [ "EventList", "Event" ] (list competition))
+        loadTimeDependantEventorData pathBuilder (at [ "EventList", "Event" ] (list competition))
+
+
+loadEventorStartList : CompetitionId -> Cmd Msg
+loadEventorStartList competitionId =
+    let
+        path = baseUrl ++ "starts/event?eventId=" ++ competitionId
+    in
+
+        loadEventorDatas path startList
 
 
 formatted : Time -> String
@@ -37,9 +52,17 @@ formatted time =
         |> Date.fromTime
         |> DateUtils.format
 
+loadEventorDatas : String -> Decoder StartList -> Cmd Msg
+loadEventorDatas url decoder =
+    let
+        httpTask =
+            decodeUrlResponse url decoder
 
-loadEventorData : (Time -> String) -> Decoder (List Competition) -> Cmd Msg
-loadEventorData pathBuilder decoder =
+    in
+        Task.perform FetchFail FetchStartListSucceed httpTask
+
+loadTimeDependantEventorData : (Time -> String) -> Decoder (List Competition) -> Cmd Msg
+loadTimeDependantEventorData pathBuilder decoder =
     let
         httpTask time =
             decodeUrlResponse (pathBuilder time) decoder

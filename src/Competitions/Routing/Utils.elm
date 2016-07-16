@@ -26,6 +26,7 @@ reverse route =
 
         CompetitionRoute id ->
             matcherToPath matcherCompetition [ id ]
-
+        StartListRoute competitionId raceId ->
+            matcherToPath matcherStartList [ competitionId, raceId ]
         NotFoundRoute ->
             ""

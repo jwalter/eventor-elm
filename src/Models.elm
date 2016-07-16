@@ -2,7 +2,7 @@ module Models exposing (..)
 
 import Hop.Types exposing (Location, newLocation)
 import Material
-import Competitions.Models exposing (Competition)
+import Competitions.Models exposing (Competition, StartList(..))
 
 
 type Route
@@ -15,8 +15,9 @@ type alias AppModel =
     { competitions : List Competition
     , location : Location
     , route : Route
-    , mdl : Material.Model
     , selectedCompetition : Maybe Competition
+    , startList : StartList
+    , mdl : Material.Model
     }
 
 
@@ -25,6 +26,7 @@ newAppModel route location =
     { competitions = []
     , location = location
     , route = route
-    , mdl = Material.model
     , selectedCompetition = Maybe.Nothing
+    , startList = Empty
+    , mdl = Material.model
     }

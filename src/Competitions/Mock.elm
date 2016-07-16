@@ -1,17 +1,17 @@
-module Competitions.Mock exposing (competitions)
+module Competitions.Mock exposing (competitions, startList, stringToStartList)
 
 import Json.Decode exposing (string, int, list, at, map, Decoder, decodeString)
-import Competitions.Models exposing (Competition)
-import Eventor.Decode exposing (competition)
+import Competitions.Models exposing (..)
+import Eventor.Decode exposing (competition, startList)
 
 
 competitions : List Competition
 competitions =
     let
-        name =
-            decodedName
+        decodedCompetitions =
+            competitionsFromJson
     in
-        case name of
+        case decodedCompetitions of
             Ok value ->
                 value
 
@@ -19,10 +19,1128 @@ competitions =
                 (Debug.log msg [])
 
 
-decodedName : Result String (List Competition)
-decodedName =
+startList : CompetitionId -> StartList
+startList competitionId =
+    let
+        decodedStartList =
+            startListFromJson startListJson
+    in
+        case decodedStartList of
+            Ok value ->
+                value
+
+            Err msg ->
+                (Debug.log msg emptyStartList)
+
+
+stringToStartList : String -> StartList
+stringToStartList json =
+    let
+        decodedStartList =
+            startListFromJson json
+    in
+        case decodedStartList of
+            Ok value ->
+                value
+
+            Err msg ->
+                (Debug.log msg emptyStartList)
+
+
+startListFromJson : String -> Result String StartList
+startListFromJson json =
     decodeString
-        (at ["EventList", "Event"] (list competition))
+        Eventor.Decode.startList
+        json
+
+
+startListJson : String
+startListJson =
+    """
+            {
+  "StartList": {
+      "Event": [
+      {
+        "$": {
+          "eventForm": "IndSingleDay"
+        },
+        "EventId": [
+          "11646"
+        ],
+        "Name": [
+          {
+            "_": "Ungdomsserien deltävling 3",
+            "$": {
+              "languageId": "sv"
+            }
+          }
+        ],
+        "EventClassificationId": [
+          "4"
+        ],
+        "EventStatusId": [
+          "9"
+        ],
+        "StartDate": [
+          {
+            "Date": [
+              "2015-08-20"
+            ],
+            "Clock": [
+              "18:00:00"
+            ]
+          }
+        ],
+        "FinishDate": [
+          {
+            "Date": [
+              "2015-08-20"
+            ],
+            "Clock": [
+              "18:00:00"
+            ]
+          }
+        ],
+        "Organiser": [
+          {
+            "OrganisationId": [
+              "242"
+            ]
+          }
+        ],
+        "WebURL": [
+          "http://www.lok.se/"
+        ],
+        "Comment": [
+          ""
+        ],
+        "PunchingUnitType": [
+          {
+            "$": {
+              "value": "SI"
+            }
+          }
+        ],
+        "ModifyDate": [
+          {
+            "Date": [
+              "2015-08-21"
+            ],
+            "Clock": [
+              "07:37:54"
+            ]
+          }
+        ],
+        "ModifiedBy": [
+          {
+            "PersonId": [
+              {
+                "_": "26406",
+                "$": {
+                  "type": "nat",
+                  "idManager": "Eventor"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "ClassStart": [
+      {
+        "$": {
+          "numberOfEntries": "8"
+        },
+        "EventClass": [
+          {
+            "$": {
+              "totalResult": "Y",
+              "timePresentation": "Y",
+              "teamEntry": "N",
+              "sex": "B",
+              "sequence": "730",
+              "numberOfVacancies": "0",
+              "numberOfPrizes": "0",
+              "numberOfLegs": "1",
+              "numberInTeam": "1",
+              "normalizedClass": "Y",
+              "maxNumberInClass": "0",
+              "highAge": "16",
+              "divideClassMethod": "divideByClub",
+              "allowEntryInAdvance": "Y",
+              "actualForRanking": "N"
+            },
+            "EventClassId": [
+              "193449"
+            ],
+            "Name": [
+              {
+                "_": "U2",
+                "$": {
+                  "languageId": "sv"
+                }
+              }
+            ],
+            "ClassShortName": [
+              "U2"
+            ],
+            "EventClassStatus": [
+              {
+                "$": {
+                  "value": "normal"
+                }
+              }
+            ],
+            "EventId": [
+              "11646"
+            ],
+            "ClassTypeId": [
+              "18"
+            ],
+            "BaseClassId": [
+              "60"
+            ],
+            "PunchingUnitType": [
+              {
+                "$": {
+                  "value": "SI"
+                }
+              }
+            ],
+            "ModifyDate": [
+              {
+                "Date": [
+                  "2015-06-29"
+                ],
+                "Clock": [
+                  "11:14:06"
+                ]
+              }
+            ],
+            "ClassRaceInfo": [
+              {
+                "$": {
+                  "timeResolution": "seconds",
+                  "restartedTeamsAfter": "Y",
+                  "relayLeg": "1",
+                  "rankingRace": "Y",
+                  "priceGivingDone": "N",
+                  "numberOfPrizes": "0",
+                  "minRunners": "1",
+                  "maxRunners": "1",
+                  "finishChute": "",
+                  "bibNumberPrefix": "",
+                  "bibNumberInherit": "Y",
+                  "bibNumberBase": ""
+                },
+                "ClassRaceInfoId": [
+                  "223954"
+                ],
+                "EventRaceId": [
+                  "12323"
+                ],
+                "EventClassId": [
+                  "193449"
+                ],
+                "Name": [
+                  ""
+                ],
+                "CourseLength": [
+                  "0"
+                ],
+                "FirstStart": [
+                  {
+                    "Date": [
+                      "2015-08-20"
+                    ],
+                    "Clock": [
+                      "18:00:00"
+                    ]
+                  }
+                ],
+                "StartInterval": [
+                  {
+                    "Time": [
+                      "00:00"
+                    ]
+                  }
+                ],
+                "EstimatedBestTime": [
+                  {
+                    "Time": [
+                      "0:00"
+                    ]
+                  }
+                ],
+                "EstimatedLastPrizeTime": [
+                  {
+                    "Time": [
+                      "0:00"
+                    ]
+                  }
+                ],
+                "AllocationMethod": [
+                  {
+                    "$": {
+                      "value": "sNormalDraw"
+                    }
+                  }
+                ],
+                "StartMethod": [
+                  {
+                    "$": {
+                      "value": "allocatedStart",
+                      "lateStartLimit": "0",
+                      "earlyStartLimit": "0"
+                    }
+                  }
+                ],
+                "ClassRaceStatus": [
+                  {
+                    "$": {
+                      "value": "notAllocated"
+                    }
+                  }
+                ],
+                "PunchingUnitType": [
+                  {
+                    "$": {
+                      "value": "SI"
+                    }
+                  }
+                ],
+                "ModifyDate": [
+                  {
+                    "Date": [
+                      "2015-06-29"
+                    ],
+                    "Clock": [
+                      "11:14:06"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "PersonStart": [
+          {
+            "Person": [
+              {
+                "$": {
+                  "sex": "F"
+                },
+                "PersonName": [
+                  {
+                    "Family": [
+                      "Ström"
+                    ],
+                    "Given": [
+                      {
+                        "_": "Livia",
+                        "$": {
+                          "sequence": "1"
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "PersonId": [
+                  {
+                    "_": "120968",
+                    "$": {
+                      "type": "nat",
+                      "idManager": "Eventor"
+                    }
+                  }
+                ],
+                "BirthDate": [
+                  {
+                    "Date": [
+                      "2004-08-24"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "Organisation": [
+              {
+                "OrganisationId": [
+                  "367"
+                ],
+                "Name": [
+                  {
+                    "_": "Stjärnorps SK",
+                    "$": {
+                      "languageId": "sv"
+                    }
+                  }
+                ],
+                "ShortName": [
+                  {
+                    "_": "Stjärnorps SK",
+                    "$": {
+                      "languageId": "sv"
+                    }
+                  }
+                ],
+                "CountryId": [
+                  {
+                    "$": {
+                      "value": ""
+                    }
+                  }
+                ]
+              }
+            ],
+            "Start": [
+              {
+                "BibNumber": [
+                  "610"
+                ],
+                "CCardId": [
+                  "256839"
+                ],
+                "StartTime": [
+                  {
+                    "Date": [
+                      "2015-08-20"
+                    ],
+                    "Clock": [
+                      "18:26:00"
+                    ]
+                  }
+                ],
+                "StartId": [
+                  "f8a57ca2-326e-4b97-a16a-63cb565268e9"
+                ],
+                "ModifyDate": [
+                  {
+                    "Date": [
+                      "2015-08-21"
+                    ],
+                    "Clock": [
+                      "07:37:52"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Person": [
+              {
+                "PersonName": [
+                  {
+                    "Family": [
+                      "Andersson"
+                    ],
+                    "Given": [
+                      {
+                        "_": "Alba",
+                        "$": {
+                          "sequence": "1"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "Organisation": [
+              {
+                "OrganisationId": [
+                  "242"
+                ],
+                "Name": [
+                  {
+                    "_": "Linköpings OK",
+                    "$": {
+                      "languageId": "sv"
+                    }
+                  }
+                ],
+                "ShortName": [
+                  {
+                    "_": "Linköpings OK",
+                    "$": {
+                      "languageId": "sv"
+                    }
+                  }
+                ],
+                "CountryId": [
+                  {
+                    "$": {
+                      "value": ""
+                    }
+                  }
+                ]
+              }
+            ],
+            "Start": [
+              {
+                "BibNumber": [
+                  "609"
+                ],
+                "CCardId": [
+                  "424910"
+                ],
+                "StartTime": [
+                  {
+                    "Date": [
+                      "2015-08-20"
+                    ],
+                    "Clock": [
+                      "18:23:00"
+                    ]
+                  }
+                ],
+                "StartId": [
+                  "ae6554fd-506b-4f4d-816e-81e096af9c82"
+                ],
+                "ModifyDate": [
+                  {
+                    "Date": [
+                      "2015-08-21"
+                    ],
+                    "Clock": [
+                      "07:37:52"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Person": [
+              {
+                "$": {
+                  "sex": "M"
+                },
+                "PersonName": [
+                  {
+                    "Family": [
+                      "Thomassen"
+                    ],
+                    "Given": [
+                      {
+                        "_": "Vilhelm",
+                        "$": {
+                          "sequence": "1"
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "PersonId": [
+                  {
+                    "_": "121060",
+                    "$": {
+                      "type": "nat",
+                      "idManager": "Eventor"
+                    }
+                  }
+                ],
+                "BirthDate": [
+                  {
+                    "Date": [
+                      "2007-05-25"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "Organisation": [
+              {
+                "OrganisationId": [
+                  "242"
+                ],
+                "Name": [
+                  {
+                    "_": "Linköpings OK",
+                    "$": {
+                      "languageId": "sv"
+                    }
+                  }
+                ],
+                "ShortName": [
+                  {
+                    "_": "Linköpings OK",
+                    "$": {
+                      "languageId": "sv"
+                    }
+                  }
+                ],
+                "CountryId": [
+                  {
+                    "$": {
+                      "value": ""
+                    }
+                  }
+                ]
+              }
+            ],
+            "Start": [
+              {
+                "BibNumber": [
+                  "608"
+                ],
+                "CCardId": [
+                  "445212"
+                ],
+                "StartTime": [
+                  {
+                    "Date": [
+                      "2015-08-20"
+                    ],
+                    "Clock": [
+                      "18:20:00"
+                    ]
+                  }
+                ],
+                "StartId": [
+                  "b189cb0e-ed84-499d-bfc0-719993266d40"
+                ],
+                "ModifyDate": [
+                  {
+                    "Date": [
+                      "2015-08-21"
+                    ],
+                    "Clock": [
+                      "07:37:52"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Person": [
+              {
+                "$": {
+                  "sex": "F"
+                },
+                "PersonName": [
+                  {
+                    "Family": [
+                      "Ström"
+                    ],
+                    "Given": [
+                      {
+                        "_": "Amilia",
+                        "$": {
+                          "sequence": "1"
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "PersonId": [
+                  {
+                    "_": "120966",
+                    "$": {
+                      "type": "nat",
+                      "idManager": "Eventor"
+                    }
+                  }
+                ],
+                "BirthDate": [
+                  {
+                    "Date": [
+                      "2005-12-31"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "Organisation": [
+              {
+                "OrganisationId": [
+                  "367"
+                ],
+                "Name": [
+                  {
+                    "_": "Stjärnorps SK",
+                    "$": {
+                      "languageId": "sv"
+                    }
+                  }
+                ],
+                "ShortName": [
+                  {
+                    "_": "Stjärnorps SK",
+                    "$": {
+                      "languageId": "sv"
+                    }
+                  }
+                ],
+                "CountryId": [
+                  {
+                    "$": {
+                      "value": ""
+                    }
+                  }
+                ]
+              }
+            ],
+            "Start": [
+              {
+                "BibNumber": [
+                  "607"
+                ],
+                "CCardId": [
+                  "256861"
+                ],
+                "StartTime": [
+                  {
+                    "Date": [
+                      "2015-08-20"
+                    ],
+                    "Clock": [
+                      "18:17:00"
+                    ]
+                  }
+                ],
+                "StartId": [
+                  "88834681-e49e-4aa6-88b7-96efd79c314d"
+                ],
+                "ModifyDate": [
+                  {
+                    "Date": [
+                      "2015-08-21"
+                    ],
+                    "Clock": [
+                      "07:37:52"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Person": [
+              {
+                "$": {
+                  "sex": "M"
+                },
+                "PersonName": [
+                  {
+                    "Family": [
+                      "Thorée"
+                    ],
+                    "Given": [
+                      {
+                        "_": "Oliver",
+                        "$": {
+                          "sequence": "1"
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "PersonId": [
+                  {
+                    "_": "131624",
+                    "$": {
+                      "type": "nat",
+                      "idManager": "Eventor"
+                    }
+                  }
+                ],
+                "BirthDate": [
+                  {
+                    "Date": [
+                      "2007-05-29"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "Organisation": [
+              {
+                "OrganisationId": [
+                  "242"
+                ],
+                "Name": [
+                  {
+                    "_": "Linköpings OK",
+                    "$": {
+                      "languageId": "sv"
+                    }
+                  }
+                ],
+                "ShortName": [
+                  {
+                    "_": "Linköpings OK",
+                    "$": {
+                      "languageId": "sv"
+                    }
+                  }
+                ],
+                "CountryId": [
+                  {
+                    "$": {
+                      "value": ""
+                    }
+                  }
+                ]
+              }
+            ],
+            "Start": [
+              {
+                "BibNumber": [
+                  "605"
+                ],
+                "CCardId": [
+                  "445213"
+                ],
+                "StartTime": [
+                  {
+                    "Date": [
+                      "2015-08-20"
+                    ],
+                    "Clock": [
+                      "18:11:00"
+                    ]
+                  }
+                ],
+                "StartId": [
+                  "d1fa440c-cb46-4d21-a89e-527f1a7acc66"
+                ],
+                "ModifyDate": [
+                  {
+                    "Date": [
+                      "2015-08-21"
+                    ],
+                    "Clock": [
+                      "07:37:52"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Person": [
+              {
+                "$": {
+                  "sex": "F"
+                },
+                "PersonName": [
+                  {
+                    "Family": [
+                      "Dalbark"
+                    ],
+                    "Given": [
+                      {
+                        "_": "Sanna",
+                        "$": {
+                          "sequence": "1"
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "PersonId": [
+                  {
+                    "_": "115182",
+                    "$": {
+                      "type": "nat",
+                      "idManager": "Eventor"
+                    }
+                  }
+                ],
+                "BirthDate": [
+                  {
+                    "Date": [
+                      "2006-06-04"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "Organisation": [
+              {
+                "OrganisationId": [
+                  "242"
+                ],
+                "Name": [
+                  {
+                    "_": "Linköpings OK",
+                    "$": {
+                      "languageId": "sv"
+                    }
+                  }
+                ],
+                "ShortName": [
+                  {
+                    "_": "Linköpings OK",
+                    "$": {
+                      "languageId": "sv"
+                    }
+                  }
+                ],
+                "CountryId": [
+                  {
+                    "$": {
+                      "value": ""
+                    }
+                  }
+                ]
+              }
+            ],
+            "Start": [
+              {
+                "BibNumber": [
+                  "602"
+                ],
+                "CCardId": [
+                  "343553"
+                ],
+                "StartTime": [
+                  {
+                    "Date": [
+                      "2015-08-20"
+                    ],
+                    "Clock": [
+                      "18:02:00"
+                    ]
+                  }
+                ],
+                "StartId": [
+                  "2c53807a-da0b-47c6-aebd-c258c0d2c404"
+                ],
+                "ModifyDate": [
+                  {
+                    "Date": [
+                      "2015-08-21"
+                    ],
+                    "Clock": [
+                      "07:37:52"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Person": [
+              {
+                "$": {
+                  "sex": "F"
+                },
+                "PersonName": [
+                  {
+                    "Family": [
+                      "Nyander"
+                    ],
+                    "Given": [
+                      {
+                        "_": "Elsa",
+                        "$": {
+                          "sequence": "1"
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "PersonId": [
+                  {
+                    "_": "115718",
+                    "$": {
+                      "type": "nat",
+                      "idManager": "Eventor"
+                    }
+                  }
+                ],
+                "BirthDate": [
+                  {
+                    "Date": [
+                      "2007-07-24"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "Organisation": [
+              {
+                "OrganisationId": [
+                  "610"
+                ],
+                "Name": [
+                  {
+                    "_": "OK Roxen",
+                    "$": {
+                      "languageId": "sv"
+                    }
+                  }
+                ],
+                "ShortName": [
+                  {
+                    "_": "OK Roxen",
+                    "$": {
+                      "languageId": "sv"
+                    }
+                  }
+                ],
+                "CountryId": [
+                  {
+                    "$": {
+                      "value": ""
+                    }
+                  }
+                ]
+              }
+            ],
+            "Start": [
+              {
+                "BibNumber": [
+                  "604"
+                ],
+                "CCardId": [
+                  "28082"
+                ],
+                "StartTime": [
+                  {
+                    "Date": [
+                      "2015-08-20"
+                    ],
+                    "Clock": [
+                      "18:08:00"
+                    ]
+                  }
+                ],
+                "StartId": [
+                  "e6d91f94-84a7-49a5-b369-e33b9f414891"
+                ],
+                "ModifyDate": [
+                  {
+                    "Date": [
+                      "2015-08-21"
+                    ],
+                    "Clock": [
+                      "07:37:52"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Person": [
+              {
+                "$": {
+                  "sex": "F"
+                },
+                "PersonName": [
+                  {
+                    "Family": [
+                      "Kjellman"
+                    ],
+                    "Given": [
+                      {
+                        "_": "Ida",
+                        "$": {
+                          "sequence": "1"
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "PersonId": [
+                  {
+                    "_": "83653",
+                    "$": {
+                      "type": "nat",
+                      "idManager": "Eventor"
+                    }
+                  }
+                ],
+                "BirthDate": [
+                  {
+                    "Date": [
+                      "2010-05-23"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "Organisation": [
+              {
+                "OrganisationId": [
+                  "242"
+                ],
+                "Name": [
+                  {
+                    "_": "Linköpings OK",
+                    "$": {
+                      "languageId": "sv"
+                    }
+                  }
+                ],
+                "ShortName": [
+                  {
+                    "_": "Linköpings OK",
+                    "$": {
+                      "languageId": "sv"
+                    }
+                  }
+                ],
+                "CountryId": [
+                  {
+                    "$": {
+                      "value": ""
+                    }
+                  }
+                ]
+              }
+            ],
+            "Start": [
+              {
+                "BibNumber": [
+                  "606"
+                ],
+                "CCardId": [
+                  "9671029"
+                ],
+                "StartTime": [
+                  {
+                    "Date": [
+                      "2015-08-20"
+                    ],
+                    "Clock": [
+                      "18:14:00"
+                    ]
+                  }
+                ],
+                "StartId": [
+                  "59cbfed0-d7f8-45b2-bc97-6795e16b2064"
+                ],
+                "ModifyDate": [
+                  {
+                    "Date": [
+                      "2015-08-21"
+                    ],
+                    "Clock": [
+                      "07:37:52"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
+"""
+
+
+competitionsFromJson : Result String (List Competition)
+competitionsFromJson =
+    decodeString
+        (at [ "EventList", "Event" ] (list competition))
         """
    {
     "EventList": {
