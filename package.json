@@ -14,14 +14,14 @@
     "ace-css": "^1.0.1"
   },
   "devDependencies": {
-    "css-loader": "^0.23.1",
-    "elm-hot-loader": "^0.3.3",
-    "elm-webpack-loader": "^3.0.3",
-    "file-loader": "^0.9.0",
-    "style-loader": "^0.13.1",
+    "css-loader": "^0.28.0",
+    "elm-hot-loader": "^0.5.4",
+    "elm-webpack-loader": "^4.3.0",
+    "file-loader": "^0.11.0",
+    "style-loader": "^0.16.1",
     "url-loader": "^0.5.7",
-    "webpack": "^1.13.1",
+    "webpack": "^2.3.2",
     "webpack-dev-middleware": "^1.6.1",
-    "webpack-dev-server": "^1.14.1"
+    "webpack-dev-server": "^2.4.2"
   }
 }
